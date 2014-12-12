@@ -1,6 +1,14 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q) {
+
+    localforage.config({
+      name:'Capilleira',
+      version:1.0,
+      storeName:'capilleira_desktop', // Should be alphanumeric, with underscores.
+      description:'Local Forage for Capilleira Desktop'
+    });
+
     var CONSTANT_VARS = {
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
         LOCALFORAGE_EXPIRATION: {
