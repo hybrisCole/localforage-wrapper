@@ -49,7 +49,7 @@ angular
               localforage.removeItem(key);
               defer.resolve(null);
             }else {
-              item.value = sanitizeValue(item.value);
+              //item.value = sanitizeValue(item.value);
               defer.resolve(item.value);
             }
           }else {
