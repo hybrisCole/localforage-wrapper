@@ -43,9 +43,14 @@ angular
         localforage.getItem(key).then(function(item) {
           //localForage returns null, not undefined
           if (!_.isNull(item)) {
-            var spanDiff = moment().diff(moment(item.timeStamp, CONSTANT_VARS.DATE_FORMAT),
-              CONSTANT_VARS.LOCALFORAGE_EXPIRATION.unit);
-            if (spanDiff > CONSTANT_VARS.LOCALFORAGE_EXPIRATION.span) {
+            var expirationUnit = CONSTANT_VARS.LOCALFORAGE_EXPIRATION.unit,
+                expirationSpan = CONSTANT_VARS.LOCALFORAGE_EXPIRATION.span,
+                spanDiff = moment().diff(moment(item.timeStamp, CONSTANT_VARS.DATE_FORMAT), expirationUnit);
+            if (item.expiration && item.expiration.unit && item.expiration.span) {
+              expirationUnit = item.expiration.unit;
+              expirationSpan = item.expiration.span;
+            }
+            if (spanDiff > expirationSpan) {
               localforage.removeItem(key);
               defer.resolve(null);
             }else {
@@ -62,13 +67,16 @@ angular
 
         return defer.promise;
       },
-      set: function(key, value) {
+      set: function(key, value, expiration) {
         //sanitizing before saving
         value = sanitizeValue(value);
 
         var defer = $q.defer();
-        localforage.setItem(key, {value:value,
-          timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT)
+        localforage.setItem(key,
+          {
+            value:value,
+            timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
+            expiration:expiration
         }).then(function(data) {
           defer.resolve(data);
         }, function(err) {
