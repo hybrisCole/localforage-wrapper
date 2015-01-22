@@ -45,16 +45,16 @@ angular
           if (!_.isNull(item)) {
             var expirationUnit = CONSTANT_VARS.LOCALFORAGE_EXPIRATION.unit,
                 expirationSpan = CONSTANT_VARS.LOCALFORAGE_EXPIRATION.span,
-                spanDiff = moment().diff(moment(item.timeStamp, CONSTANT_VARS.DATE_FORMAT), expirationUnit);
+                spanDiff;
             if (item.expiration && item.expiration.unit && item.expiration.span) {
               expirationUnit = item.expiration.unit;
               expirationSpan = item.expiration.span;
             }
+            spanDiff = moment().diff(moment(item.timeStamp, CONSTANT_VARS.DATE_FORMAT), expirationUnit);
             if (spanDiff > expirationSpan) {
               localforage.removeItem(key);
               defer.resolve(null);
             }else {
-              //item.value = sanitizeValue(item.value);
               defer.resolve(item.value);
             }
           }else {
