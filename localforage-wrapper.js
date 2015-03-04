@@ -3,10 +3,10 @@ angular
   .factory('LocalForageFactory', function($q) {
 
     localforage.config({
-      name:'Capilleira',
-      version:1.0,
-      storeName:'capilleira_desktop', // Should be alphanumeric, with underscores.
-      description:'Local Forage for Capilleira Desktop'
+      name:'kZpVnlVcXkiOiI',
+      version:1.1,
+      storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
+      description:'4dWRZWkpEQXltL1dGMllRd0'
     });
 
     var CONSTANT_VARS = {
@@ -17,19 +17,20 @@ angular
         }
       },
       sanitizeValue = function(value) {
-      if (_.isString(value)) {
-        value = sanitizeString(value);
-      }else if (_.isObject(value)) {
+      var toSanitize = _.clone(value, true);
+      if (_.isString(toSanitize)) {
+        toSanitize = sanitizeString(toSanitize);
+      }else if (_.isObject(toSanitize)) {
         var sanitizedObj = {};
-        _.forOwn(value, function(objectProp, objectKey) {
+        _.forOwn(toSanitize, function(objectProp, objectKey) {
           if (_.isString(objectProp)) {
             objectProp = sanitizeString(objectProp);
           }
           sanitizedObj[objectKey] = objectProp;
         });
-        value = sanitizedObj;
+        toSanitize = sanitizedObj;
       }
-      return value;
+      return toSanitize;
 
     }, sanitizeString = function(stringVal) {
       return validator.stripLow(validator.escape(validator.trim(stringVal)))
