@@ -1,3 +1,5 @@
+'use strict';
+
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q) {
@@ -17,20 +19,19 @@ angular
         }
       },
       sanitizeValue = function(value) {
-      var toSanitize = _.clone(value, true);
+      var toSanitize = _.clone(value, true),
+          sanitizedObj = {};
       if (_.isString(toSanitize)) {
-        toSanitize = sanitizeString(toSanitize);
+        sanitizedObj = sanitizeString(toSanitize);
       }else if (_.isObject(toSanitize)) {
-        var sanitizedObj = {};
         _.forOwn(toSanitize, function(objectProp, objectKey) {
           if (_.isString(objectProp)) {
             objectProp = sanitizeString(objectProp);
           }
           sanitizedObj[objectKey] = objectProp;
         });
-        toSanitize = sanitizedObj;
       }
-      return toSanitize;
+      return sanitizedObj;
 
     }, sanitizeString = function(stringVal) {
       return validator.stripLow(validator.escape(validator.trim(stringVal)))
