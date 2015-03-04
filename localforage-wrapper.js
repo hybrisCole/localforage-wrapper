@@ -70,8 +70,12 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
+        var isArray = _.isArray(value);
         //sanitizing before saving
         value = sanitizeValue(value);
+        if (isArray) {
+          value = _.values(value);
+        }
 
         var defer = $q.defer();
         localforage.setItem(key,
