@@ -3,15 +3,10 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q) {
-
-    localforage.config({
-      name:'kZpVnlVcXkiOiI',
-      version:1.1,
-      storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
-      description:'4dWRZWkpEQXltL1dGMllRd0'
-    });
-
-    var CONSTANT_VARS = {
+    //is it IE?
+    var msie,
+      driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
+      CONSTANT_VARS = {
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
         LOCALFORAGE_EXPIRATION: {
           unit: 'minutes',
@@ -19,24 +14,43 @@ angular
         }
       },
       sanitizeValue = function(value) {
-      var toSanitize = _.clone(value, true),
+        var toSanitize = _.clone(value, true),
           sanitizedObj = {};
-      if (_.isString(toSanitize)) {
-        sanitizedObj = sanitizeString(toSanitize);
-      }else if (_.isObject(toSanitize)) {
-        _.forOwn(toSanitize, function(objectProp, objectKey) {
-          if (_.isString(objectProp)) {
-            objectProp = sanitizeString(objectProp);
-          }
-          sanitizedObj[objectKey] = objectProp;
-        });
-      }
-      return sanitizedObj;
+        if (_.isString(toSanitize)) {
+          sanitizedObj = sanitizeString(toSanitize);
+        }else if (_.isObject(toSanitize)) {
+          _.forOwn(toSanitize, function(objectProp, objectKey) {
+            if (_.isString(objectProp)) {
+              objectProp = sanitizeString(objectProp);
+            }
+            sanitizedObj[objectKey] = objectProp;
+          });
+        }
+        return sanitizedObj;
 
-    }, sanitizeString = function(stringVal) {
-      return validator.stripLow(validator.escape(validator.trim(stringVal)))
-        .replace(/[^\x00-\x7F]/gi, '').replace(/[^\x00-\x80]/gi, '').replace(/\\u/gi, '');
-    };
+      },
+      sanitizeString = function(stringVal) {
+        return validator.stripLow(validator.escape(validator.trim(stringVal)))
+          .replace(/[^\x00-\x7F]/gi, '').replace(/[^\x00-\x80]/gi, '').replace(/\\u/gi, '');
+      };
+
+    msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+    if (_.isNaN(msie)) {
+      msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+    }
+
+    if (!_.isNaN(msie)) {
+      console.log('IE detected, localforage using localstorage');
+      driverConfig = [localforage.LOCALSTORAGE];
+    }
+
+    localforage.config({
+      name:'kZpVnlVcXkiOiI',
+      version:1.0,
+      storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
+      description:'4dWRZWkpEQXltL1dGMllRd0',
+      driver: driverConfig
+    });
 
     return {
       retrieve: function(key) {
@@ -46,8 +60,8 @@ angular
           //localForage returns null, not undefined
           if (!_.isNull(item)) {
             var expirationUnit = CONSTANT_VARS.LOCALFORAGE_EXPIRATION.unit,
-                expirationSpan = CONSTANT_VARS.LOCALFORAGE_EXPIRATION.span,
-                spanDiff;
+              expirationSpan = CONSTANT_VARS.LOCALFORAGE_EXPIRATION.span,
+              spanDiff;
             if (item.expiration && item.expiration.unit && item.expiration.span) {
               expirationUnit = item.expiration.unit;
               expirationSpan = item.expiration.span;
@@ -70,25 +84,25 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
-        var isArray = _.isArray(value);
+        var isArray = _.isArray(value),
+            defer = $q.defer();
         //sanitizing before saving
         value = sanitizeValue(value);
         if (isArray) {
           value = _.values(value);
         }
 
-        var defer = $q.defer();
         localforage.setItem(key,
           {
             value:value,
             timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
             expiration:expiration
-        }).then(function(data) {
-          defer.resolve(data);
-        }, function(err) {
-          console.log(err);
-          defer.reject(err);
-        });
+          }).then(function(data) {
+            defer.resolve(data);
+          }, function(err) {
+            console.log(err);
+            defer.reject(err);
+          });
 
         return defer.promise;
       },
