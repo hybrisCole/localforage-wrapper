@@ -1,6 +1,6 @@
 {
   "name": "localforage-wrapper",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "main": "./localforage-wrapper.js",
   "description": "localforage wrapper for Capilleira",
   "dependencies": {
