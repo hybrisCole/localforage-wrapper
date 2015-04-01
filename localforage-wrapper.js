@@ -10,7 +10,7 @@ angular
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
         LOCALFORAGE_EXPIRATION: {
           unit: 'minutes',
-          span: '5'
+          span: '15'
         }
       },
       sanitizeValue = function(value) {
