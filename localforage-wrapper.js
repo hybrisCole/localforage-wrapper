@@ -68,7 +68,7 @@ angular
             }
             spanDiff = moment().diff(moment(item.timeStamp, CONSTANT_VARS.DATE_FORMAT), expirationUnit);
             if (spanDiff > expirationSpan) {
-              localforage.removeItem(key).then(function (){
+              localforage.removeItem(key).then(function() {
                 defer.resolve(null);
               }, function(err) {
                 console.log(err);
