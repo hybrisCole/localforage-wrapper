@@ -68,8 +68,12 @@ angular
             }
             spanDiff = moment().diff(moment(item.timeStamp, CONSTANT_VARS.DATE_FORMAT), expirationUnit);
             if (spanDiff > expirationSpan) {
-              localforage.removeItem(key);
-              defer.resolve(null);
+              localforage.removeItem(key).then(function (){
+                defer.resolve(null);
+              }, function(err) {
+                console.log(err);
+                defer.resolve(null);
+              });
             }else {
               defer.resolve(item.value);
             }
@@ -84,8 +88,9 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
+        expiration = expiration || CONSTANT_VARS.LOCALFORAGE_EXPIRATION;
         var isArray = _.isArray(value),
-            defer = $q.defer();
+          defer = $q.defer();
         //sanitizing before saving
         value = sanitizeValue(value);
         if (isArray) {
