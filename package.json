@@ -4,10 +4,10 @@
   "description": "localforage wrapper for Capilleira",
   "repository": "https://github.com/hybrisCole/localforage-wrapper",
   "dependencies": {
-    "gulp": "3.8.11",
-    "gulp-concat": "2.5.2",
-    "gulp-jscs": "1.4.0",
-    "gulp-jshint": "1.9.4",
-    "gulp-uglify": "1.1.0"
+    "gulp": "3.9.0",
+    "gulp-concat": "2.6.0",
+    "gulp-jscs": "1.6.0",
+    "gulp-jshint": "1.11.2",
+    "gulp-uglify": "1.2.0"
   }
 }
