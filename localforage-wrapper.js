@@ -3,7 +3,7 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
-    localforage.defineDriver(JSONArrayDriver);
+    localforage.defineDriver(JSONArrayDriver.generateConfig());
     //is it IE?
     var msie,
       driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
