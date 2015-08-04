@@ -21,6 +21,7 @@ angular
         window.sessionStorage.setItem('test', '1');
         window.sessionStorage.removeItem('test');
       }catch (err) {
+        alert('213213');
         driverConfig = ['jsonArrayWrapper'];
       }
       localforage.config({
@@ -31,7 +32,6 @@ angular
         driver: driverConfig
       });
     });
-    console.log(2);
     var CONSTANT_VARS = {
       DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
       LOCALFORAGE_EXPIRATION: {
@@ -79,7 +79,7 @@ angular
               localforage.removeItem(key).then(function() {
                 defer.resolve(null);
               }, function(err) {
-                console.log(err);
+                console.error(err);
                 defer.resolve(null);
               });
             }else {
@@ -89,7 +89,7 @@ angular
             defer.resolve(null);
           }
         }, function(err) {
-          console.log(err);
+          console.error(err);
           defer.reject(err);
         });
 
@@ -113,7 +113,7 @@ angular
           }).then(function(data) {
             defer.resolve(data);
           }, function(err) {
-            console.log(err);
+            console.error(err);
             defer.reject(err);
           });
 
