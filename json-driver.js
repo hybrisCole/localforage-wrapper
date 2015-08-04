@@ -1,66 +1,64 @@
 'use strict';
+(function() {
+  var jsonArray = [];
+  angular
+    .module('capilleira.localforage-wrapper')
+    .factory('JSONArrayDriver', function($q) {
+      return {
+        generateConfig: function() {
+          return {
+            _driver: 'jsonArrayWrapper',
+            _support: true,
+            _initStorage: function() {
+              jsonArray = [];
+            },
+            clear: function() {
+              var defer = $q.defer();
+              jsonArray = [];
+              defer.resolve(jsonArray);
+              return defer.promise;
+            },
+            getItem: function(key) {
+              var defer = $q.defer(),
+                item = _.find(jsonArray, {key: key});
+              defer.resolve(item.value);
+              return defer.promise;
 
-angular
-  .module('capilleira.localforage-wrapper')
-  .factory('JSONArrayDriver', function($q) {
-    var jsonArray = [];
-    return {
-      generateConfig: function() {
-        return {
-          _driver: 'jsonArrayWrapper',
-          _support: true,
-          _initStorage: function() {
-            jsonArray = [];
-          },
-          clear: function(callback) {
-            var defer = $q.defer();
-            jsonArray = [];
-            defer.resolve(jsonArray);
-            callback(null, jsonArray);
-            return defer.promise;
-          },
-          getItem: function(key, callback) {
-            var defer = $q.defer(),
-              item = _.find(jsonArray, {key: key});
-            defer.resolve(item);
-            callback(null, item);
-            return defer.promise;
-
-          },
-          iterate: function() {
-            // Custom implementation here...
-          },
-          key: function() {
-            // Custom implementation here...
-          },
-          keys: function() {
-            // Custom implementation here...
-          },
-          length: function(callback) {
-            var defer = $q.defer();
-            defer.resolve(jsonArray.length);
-            callback(null, jsonArray);
-            return defer.promise;
-          },
-          removeItem: function(key, callback) {
-            var defer = $q.defer();
-            jsonArray = _.difference(jsonArray, [_.find(jsonArray, {key: key})]);
-            defer.resolve(jsonArray);
-            callback(null, jsonArray);
-            return defer.promise;
-          },
-          setItem: function(key, value, callback) {
-            alert('!');
-            var defer = $q.defer();
-            jsonArray.push({
-              key: key,
-              value: value
-            });
-            defer.resolve(jsonArray);
-            callback(null, jsonArray);
-            return defer.promise;
-          }
-        };
-      }
-    };
-  });
+            },
+            iterate: function() {
+              // Custom implementation here...
+              console.log('not implemented');
+            },
+            key: function() {
+              // Custom implementation here...
+              console.log('not implemented');
+            },
+            keys: function() {
+              // Custom implementation here...
+              console.log('not implemented');
+            },
+            length: function() {
+              var defer = $q.defer();
+              defer.resolve(jsonArray.length);
+              return defer.promise;
+            },
+            removeItem: function(key) {
+              var defer = $q.defer();
+              jsonArray = _.difference(jsonArray, [_.find(jsonArray, {key: key})]);
+              defer.resolve(jsonArray);
+              return defer.promise;
+            },
+            setItem: function(key, value) {
+              var defer = $q.defer();
+              jsonArray.push({
+                key: key,
+                value: value
+              });
+              defer.resolve(value);
+              return defer.promise;
+            }
+          };
+        }
+      };
+    });
+})();

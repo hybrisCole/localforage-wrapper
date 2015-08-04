@@ -23,8 +23,8 @@
     "angular": false,
     "cordova": false,
     "localforage": false,
-    "_": false,
     "moment": false,
+    "_": false,
     "validator": false
   }
 }
