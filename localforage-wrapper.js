@@ -131,7 +131,6 @@ angular
         return defer.promise;
       },
       remove: function(key) {
-        localforage.setDriver('jsonArrayWrapper');
         var defer = $q.defer();
         localforage.removeItem(key).then(function(err) {
           if (err) {
