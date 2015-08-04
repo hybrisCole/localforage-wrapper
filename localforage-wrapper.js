@@ -21,7 +21,6 @@ angular
         window.sessionStorage.setItem('test', '1');
         window.sessionStorage.removeItem('test');
       }catch (err) {
-        alert('213213');
         driverConfig = ['jsonArrayWrapper'];
       }
       localforage.config({
