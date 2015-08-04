@@ -4,67 +4,62 @@ angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
     localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function(data) {
-      console.log(data);
-      console.log(1);
+      //is it IE?
+      var msie,
+        driverConfig = ['jsonArrayWrapper'],
+      msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+      if (_.isNaN(msie)) {
+        msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+      }
+
+      if (!_.isNaN(msie)) {
+        console.log('IE detected, localforage using localstorage');
+        driverConfig = [localforage.LOCALSTORAGE];
+      }
+
+      /*Testing private browsing*/
+      try {
+        window.sessionStorage.setItem('test', '1');
+        window.sessionStorage.removeItem('test');
+      }catch (err) {
+        driverConfig = ['jsonArrayWrapper'];
+      }
+      localforage.config({
+        name:'kZpVnlVcXkiOiI',
+        version:1.0,
+        storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
+        description:'4dWRZWkpEQXltL1dGMllRd0',
+        driver: driverConfig
+      });
     });
     console.log(2);
-    //is it IE?
-    var msie,
-      driverConfig = ['jsonArrayWrapper'],
-      CONSTANT_VARS = {
-        DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
-        LOCALFORAGE_EXPIRATION: {
-          unit: 'minutes',
-          span: '15'
-        }
-      },
-      sanitizeValue = function(value) {
-        var toSanitize = _.clone(value, true),
-          sanitizedObj = {};
-        if (_.isString(toSanitize)) {
-          sanitizedObj = sanitizeString(toSanitize);
-        }else if (_.isObject(toSanitize)) {
-          _.forOwn(toSanitize, function(objectProp, objectKey) {
-            if (_.isString(objectProp)) {
-              objectProp = sanitizeString(objectProp);
-            }
-            sanitizedObj[objectKey] = objectProp;
-          });
-        }
-        return sanitizedObj;
+    var CONSTANT_VARS = {
+      DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
+      LOCALFORAGE_EXPIRATION: {
+        unit: 'minutes',
+        span: '15'
+      }
+    },
+    sanitizeValue = function(value) {
+      var toSanitize = _.clone(value, true),
+        sanitizedObj = {};
+      if (_.isString(toSanitize)) {
+        sanitizedObj = sanitizeString(toSanitize);
+      }else if (_.isObject(toSanitize)) {
+        _.forOwn(toSanitize, function(objectProp, objectKey) {
+          if (_.isString(objectProp)) {
+            objectProp = sanitizeString(objectProp);
+          }
+          sanitizedObj[objectKey] = objectProp;
+        });
+      }
+      return sanitizedObj;
 
-      },
-      sanitizeString = function(stringVal) {
-        return validator.stripLow(validator.escape(validator.trim(stringVal)))
-          .replace(/[^\x00-\x7F]/gi, '').replace(/[^\x00-\x80]/gi, '').replace(/\\u/gi, '');
-      };
-
-    msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-    if (_.isNaN(msie)) {
-      msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-    }
-
-    if (!_.isNaN(msie)) {
-      console.log('IE detected, localforage using localstorage');
-      driverConfig = [localforage.LOCALSTORAGE];
-    }
-
-    /*Testing private browsing*/
-    try {
-      window.sessionStorage.setItem('test', '1');
-      window.sessionStorage.removeItem('test');
-    }catch (err) {
-      driverConfig = ['jsonArrayWrapper'];
-    }
-
-    console.log(driverConfig);
-    localforage.config({
-      name:'kZpVnlVcXkiOiI',
-      version:1.0,
-      storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
-      description:'4dWRZWkpEQXltL1dGMllRd0',
-      driver: driverConfig
-    });
+    },
+    sanitizeString = function(stringVal) {
+      return validator.stripLow(validator.escape(validator.trim(stringVal)))
+        .replace(/[^\x00-\x7F]/gi, '').replace(/[^\x00-\x80]/gi, '').replace(/\\u/gi, '');
+    };
 
     return {
       retrieve: function(key) {
