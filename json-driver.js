@@ -26,6 +26,9 @@ angular
             return defer.promise;
 
           },
+          iterate: function() {
+            // Custom implementation here...
+          },
           key: function() {
             // Custom implementation here...
           },
