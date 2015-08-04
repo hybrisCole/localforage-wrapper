@@ -3,6 +3,7 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
+    console.time('JSONArrayDriver.generateConfig()');
     localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
       //is it IE?
       var driverConfig = ['jsonArrayWrapper'],
@@ -22,6 +23,7 @@ angular
         description:'4dWRZWkpEQXltL1dGMllRd0',
         driver: driverConfig
       });
+      console.timeEnd('JSONArrayDriver.generateConfig()');
     });
     var CONSTANT_VARS = {
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
@@ -53,6 +55,7 @@ angular
 
     return {
       retrieve: function(key) {
+        localforage.setDriver('jsonArrayWrapper');
         var defer = $q.defer();
 
         localforage.getItem(key).then(function(item) {
@@ -87,6 +90,8 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
+        console.log(key);
+        localforage.setDriver('jsonArrayWrapper');
         expiration = expiration || CONSTANT_VARS.LOCALFORAGE_EXPIRATION;
         var isArray = _.isArray(value),
           defer = $q.defer();
@@ -111,6 +116,7 @@ angular
         return defer.promise;
       },
       remove: function(key) {
+        localforage.setDriver('jsonArrayWrapper');
         var defer = $q.defer();
         localforage.removeItem(key).then(function(err) {
           if (err) {

@@ -20,8 +20,8 @@
             },
             getItem: function(key) {
               var defer = $q.defer(),
-                item = _.find(jsonArray, {key: key});
-              defer.resolve(item.value);
+                item = _.find(jsonArray, {key: key}) || {};
+              defer.resolve(item.value || null);
               return defer.promise;
 
             },
@@ -49,7 +49,6 @@
               return defer.promise;
             },
             setItem: function(key, value) {
-              console.log('sie');
               var defer = $q.defer();
               jsonArray.push({
                 key: key,
