@@ -50,7 +50,7 @@ angular
       window.sessionStorage.setItem('test', '1');
       window.sessionStorage.removeItem('test');
     }catch (err) {
-      //driverConfig = ['jsonArrayWrapper'];
+      driverConfig = ['jsonArrayWrapper'];
     }
 
     localforage.config({
