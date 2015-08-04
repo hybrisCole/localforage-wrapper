@@ -2,7 +2,8 @@
 
 angular
   .module('capilleira.localforage-wrapper', [])
-  .factory('LocalForageFactory', function($q) {
+  .factory('LocalForageFactory', function($q, JSONArrayDriver) {
+    localforage.defineDriver(JSONArrayDriver);
     //is it IE?
     var msie,
       driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
@@ -42,6 +43,14 @@ angular
     if (!_.isNaN(msie)) {
       console.log('IE detected, localforage using localstorage');
       driverConfig = [localforage.LOCALSTORAGE];
+    }
+
+    /*Testing private browsing*/
+    try {
+      window.sessionStorage.setItem('test', '1');
+      window.sessionStorage.removeItem('test');
+    }catch (err) {
+      driverConfig = ['jsonArrayWrapper'];
     }
 
     localforage.config({
