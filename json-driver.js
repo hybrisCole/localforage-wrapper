@@ -50,6 +50,7 @@ angular
             return defer.promise;
           },
           setItem: function(key, value, callback) {
+            alert('!');
             var defer = $q.defer();
             jsonArray.push({
               key: key,
