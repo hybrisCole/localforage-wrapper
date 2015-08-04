@@ -53,6 +53,7 @@ angular
       driverConfig = ['jsonArrayWrapper'];
     }
 
+    console.log(driverConfig);
     localforage.config({
       name:'kZpVnlVcXkiOiI',
       version:1.0,
