@@ -3,6 +3,7 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
+    console.log(JSONArrayDriver.generateConfig());
     localforage.defineDriver(JSONArrayDriver.generateConfig());
     //is it IE?
     var msie,
