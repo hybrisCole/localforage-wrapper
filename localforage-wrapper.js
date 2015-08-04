@@ -5,8 +5,7 @@ angular
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
     localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
       //is it IE?
-      var msie,
-        driverConfig = ['jsonArrayWrapper'],
+      var driverConfig = ['jsonArrayWrapper'],
       msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
       if (_.isNaN(msie)) {
         msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
