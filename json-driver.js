@@ -8,6 +8,7 @@ angular
       generateConfig: function() {
         return {
           _driver: 'jsonArrayWrapper',
+          _support: true,
           _initStorage: function() {
             jsonArray = [];
           },
