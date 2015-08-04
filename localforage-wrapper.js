@@ -3,7 +3,8 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
-    localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
+    localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function(data) {
+      console.log(data);
       console.log(1);
     });
     console.log(2);
