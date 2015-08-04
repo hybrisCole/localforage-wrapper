@@ -6,7 +6,7 @@ angular
     console.time('JSONArrayDriver.generateConfig()');
     localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
       //is it IE?
-      var driverConfig = ['jsonArrayWrapper'],
+      var driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
         msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
       if (_.isNaN(msie)) {
         msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
@@ -15,6 +15,9 @@ angular
       if (!_.isNaN(msie)) {
         console.log('IE detected, localforage using localstorage');
         driverConfig = [localforage.LOCALSTORAGE];
+      }
+      if (!isLocalStorageNameSupported()) {
+        driverConfig = ['jsonArrayWrapper'];
       }
       localforage.config({
         name:'kZpVnlVcXkiOiI',
@@ -47,6 +50,21 @@ angular
         }
         return sanitizedObj;
 
+      },
+      isLocalStorageNameSupported = function() {
+        var key =  'capilleira__' + Math.round(Math.random() * 1e7),
+          storage = window.sessionStorage,
+          supported;
+        try {
+          supported = ('localStorage' in window && window.localStorage !== null);
+          if (supported) {
+            storage.setItem(key, '');
+            storage.removeItem(key);
+          }
+          return true;
+        } catch (error) {
+          return false;
+        }
       },
       sanitizeString = function(stringVal) {
         return validator.stripLow(validator.escape(validator.trim(stringVal)))
