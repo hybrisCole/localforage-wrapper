@@ -90,7 +90,6 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
-        console.log(key);
         localforage.setDriver('jsonArrayWrapper');
         expiration = expiration || CONSTANT_VARS.LOCALFORAGE_EXPIRATION;
         var isArray = _.isArray(value),
