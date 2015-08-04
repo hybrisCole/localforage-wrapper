@@ -49,6 +49,7 @@
               return defer.promise;
             },
             setItem: function(key, value) {
+              alert(1);
               var defer = $q.defer();
               jsonArray.push({
                 key: key,
