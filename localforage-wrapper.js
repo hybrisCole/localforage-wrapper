@@ -73,7 +73,6 @@ angular
 
     return {
       retrieve: function(key) {
-        localforage.setDriver('jsonArrayWrapper');
         var defer = $q.defer();
 
         localforage.getItem(key).then(function(item) {
@@ -108,7 +107,6 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
-        localforage.setDriver('jsonArrayWrapper');
         expiration = expiration || CONSTANT_VARS.LOCALFORAGE_EXPIRATION;
         var isArray = _.isArray(value),
           defer = $q.defer();
