@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
     concat = require('gulp-concat'),
     jshint = require('gulp-jshint'),
@@ -10,10 +12,10 @@ var paths = {
 };
 
 // Build task
-gulp.task('default', ['js-lint']);
+gulp.task('default', ['build']);
 
 // JSHint task
-gulp.task('js-lint', function() {
+gulp.task('build', function() {
   gulp.src(paths.js)
       .pipe(jscs())
       .pipe(jshint())

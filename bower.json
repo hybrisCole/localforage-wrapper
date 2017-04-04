@@ -1,20 +1,19 @@
 {
   "name": "localforage-wrapper",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "./localforage-wrapper.min.js",
-  "description": "localforage wrapper for Capilleira",
+  "description": "localforage wrapper for WMD Software",
   "dependencies": {
-    "angular": "1.3.13",
-    "validator-js": "3.41.3",
-    "moment": "2.10.6",
+    "angular": "1.3.20",
+    "validator-js": "7.0.0",
+    "moment": "2.18.1",
     "lodash": "3.10.0",
-    "localforage": "1.2.4"
+    "localforage": "1.5.0"
   },
   "homepage": "https://github.com/hybrisCole/localforage-wrapper",
   "authors": [
-    "Alberto Cole @ Capilleira <jcole@capilleira.com>",
-    "Marcelo Retana @ Capilleira <mretana@capilleira.com>",
-    "Jorge Cascante @ Capilleira <jcascante@capilleira.com>"
+    "Alberto Cole @ WMD <acpii2005@gmail.com>",
+    "Jorge Cascante"
   ],
   "license": "MIT",
   "ignore": [

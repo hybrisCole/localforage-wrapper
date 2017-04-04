@@ -3,37 +3,17 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
-    console.time('JSONArrayDriver.generateConfig()');
-    localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
-      //is it IE?
-      var driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
-        msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-      if (_.isNaN(msie)) {
-        msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-      }
-
-      if (!_.isNaN(msie)) {
-        console.log('IE detected, localforage using localstorage');
-        driverConfig = [localforage.LOCALSTORAGE];
-      }
-      if (!isLocalStorageNameSupported()) {
-        driverConfig = ['jsonArrayWrapper'];
-      }
-      localforage.config({
-        name:'kZpVnlVcXkiOiI',
-        version:1.0,
-        storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
-        description:'4dWRZWkpEQXltL1dGMllRd0',
-        driver: driverConfig
-      });
-      console.timeEnd('JSONArrayDriver.generateConfig()');
-    });
+    // console.time('JSONArrayDriver.generateConfig()');
     var CONSTANT_VARS = {
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
         LOCALFORAGE_EXPIRATION: {
           unit: 'minutes',
           span: '15'
         }
+      },
+      sanitizeString = function(stringVal) {
+        return validator.stripLow(validator.escape(validator.trim(stringVal)))
+          .replace(/[^\x00-\x7F]/gi, '').replace(/[^\x00-\x80]/gi, '').replace(/\\u/gi, '');
       },
       sanitizeValue = function(value) {
         var toSanitize = _.clone(value, true),
@@ -65,11 +45,31 @@ angular
         } catch (error) {
           return false;
         }
-      },
-      sanitizeString = function(stringVal) {
-        return validator.stripLow(validator.escape(validator.trim(stringVal)))
-          .replace(/[^\x00-\x7F]/gi, '').replace(/[^\x00-\x80]/gi, '').replace(/\\u/gi, '');
       };
+    localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
+      //is it IE?
+      var driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
+        msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+      if (_.isNaN(msie)) {
+        msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
+      }
+
+      if (!_.isNaN(msie)) {
+        console.log('IE detected, localforage using localstorage');
+        driverConfig = [localforage.LOCALSTORAGE];
+      }
+      if (!isLocalStorageNameSupported()) {
+        driverConfig = ['jsonArrayWrapper'];
+      }
+      localforage.config({
+        name:'kZpVnlVcXkiOiI',
+        version:1.0,
+        storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
+        description:'4dWRZWkpEQXltL1dGMllRd0',
+        driver: driverConfig
+      });
+      console.timeEnd('JSONArrayDriver.generateConfig()');
+    });
 
     return {
       retrieve: function(key) {
