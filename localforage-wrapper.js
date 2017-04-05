@@ -2,7 +2,7 @@
 
 angular
   .module('capilleira.localforage-wrapper', [])
-  .factory('LocalForageFactory', function($q, JSONArrayDriver) {
+  .factory('LocalForageFactory', function($q) {
     // console.time('JSONArrayDriver.generateConfig()');
     var CONSTANT_VARS = {
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
@@ -30,44 +30,11 @@ angular
         }
         return sanitizedObj;
 
-      },
-      isLocalStorageNameSupported = function() {
-        var key =  'capilleira__' + Math.round(Math.random() * 1e7),
-          storage = window.sessionStorage,
-          supported;
-        try {
-          supported = ('localStorage' in window && window.localStorage !== null);
-          if (supported) {
-            storage.setItem(key, '');
-            storage.removeItem(key);
-          }
-          return true;
-        } catch (error) {
-          return false;
-        }
       };
-    localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
-      //is it IE?
-      var driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
-        msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-      if (_.isNaN(msie)) {
-        msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-      }
-
-      if (!_.isNaN(msie)) {
-        console.log('IE detected, localforage using localstorage');
-        driverConfig = [localforage.LOCALSTORAGE];
-      }
-      if (!isLocalStorageNameSupported()) {
-        driverConfig = ['jsonArrayWrapper'];
-      }
-      localforage.config({
-        name:'kZpVnlVcXkiOiI',
-        version:1.0,
-        storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
-        description:'4dWRZWkpEQXltL1dGMllRd0',
-        driver: driverConfig
-      });
+    localforage.config({
+      name:'wmd_software_storage',
+      storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
+      description:'4dWRZWkpEQXltL1dGMllRd0'
     });
 
     return {
@@ -106,38 +73,28 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
-        console.log(key, value, expiration);
+        console.log(localforage);
         expiration = expiration || CONSTANT_VARS.LOCALFORAGE_EXPIRATION;
-        console.log(expiration);
         var isArray = _.isArray(value),
           defer = $q.defer();
-        console.log(isArray);
         //sanitizing before saving
         value = sanitizeValue(value);
-        console.log(value);
         if (isArray) {
           value = _.values(value);
         }
-        console.log(value);
-        console.log({
-          value:value,
-          timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
-          expiration:expiration
-        });
         localforage.setItem(key,
           {
             value:value,
             timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
             expiration:expiration
           }).then(function(data) {
-            console.log(data);
+            console.log('1');
             defer.resolve(data);
           }, function(err) {
-            console.log(err);
             console.error(err);
             defer.reject(err);
           });
-
+        console.log('promise');
         return defer.promise;
       },
       remove: function(key) {
