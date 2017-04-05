@@ -106,23 +106,34 @@ angular
         return defer.promise;
       },
       set: function(key, value, expiration) {
+        console.log(key, value, expiration);
         expiration = expiration || CONSTANT_VARS.LOCALFORAGE_EXPIRATION;
+        console.log(expiration);
         var isArray = _.isArray(value),
           defer = $q.defer();
+        console.log(isArray);
         //sanitizing before saving
         value = sanitizeValue(value);
+        console.log(value);
         if (isArray) {
           value = _.values(value);
         }
-
+        console.log(value);
+        console.log({
+          value:value,
+          timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
+          expiration:expiration
+        });
         localforage.setItem(key,
           {
             value:value,
             timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
             expiration:expiration
           }).then(function(data) {
+            console.log(data);
             defer.resolve(data);
           }, function(err) {
+            console.log(err);
             console.error(err);
             defer.reject(err);
           });
