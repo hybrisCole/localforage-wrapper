@@ -53,7 +53,6 @@ angular
       if (_.isNaN(msie)) {
         msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
       }
-
       if (!_.isNaN(msie)) {
         console.log('IE detected, localforage using localstorage');
         driverConfig = [localforage.LOCALSTORAGE];
@@ -73,7 +72,6 @@ angular
     return {
       retrieve: function(key) {
         var defer = $q.defer();
-
         localforage.getItem(key).then(function(item) {
           //localForage returns null, not undefined
           if (!_.isNull(item)) {
@@ -88,7 +86,7 @@ angular
             if (spanDiff > expirationSpan) {
               localforage.removeItem(key).then(function() {
                 defer.resolve(null);
-              }, function(err) {
+              }).catch(function(err) {
                 console.error(err);
                 defer.resolve(null);
               });
@@ -98,7 +96,7 @@ angular
           }else {
             defer.resolve(null);
           }
-        }, function(err) {
+        }).catch(function(err) {
           console.error(err);
           defer.reject(err);
         });
@@ -114,32 +112,24 @@ angular
         if (isArray) {
           value = _.values(value);
         }
-        console.log(localforage);
-        localforage.setItem(key,
-          {
-            value:value,
-            timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
-            expiration:expiration
-          }, function(err, value) {
-            console.log(err, value);
-            if (err) {
-              console.error(err);
-              defer.reject(err);
-              return;
-            }
-            defer.resolve(value);
-          });
-
+        localforage.setItem(key,{
+          value:value,
+          timeStamp:moment().format(CONSTANT_VARS.DATE_FORMAT),
+          expiration:expiration
+        }).then(function(data) {
+          defer.resolve(data);
+        }).catch(function(err) {
+          console.error(err);
+          defer.reject(err);
+        });
         return defer.promise;
       },
       remove: function(key) {
         var defer = $q.defer();
-        localforage.removeItem(key).then(function(err) {
-          if (err) {
-            defer.reject(err);
-          } else {
-            defer.resolve({status:'OK!'});
-          }
+        localforage.removeItem(key).then(function() {
+          defer.resolve({status:'OK!'});
+        }).catch(function (err) {
+          defer.reject(err);
         });
         return defer.promise;
       }
