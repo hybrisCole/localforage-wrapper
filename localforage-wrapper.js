@@ -68,7 +68,6 @@ angular
         description:'4dWRZWkpEQXltL1dGMllRd0',
         driver: driverConfig
       });
-      console.timeEnd('JSONArrayDriver.generateConfig()');
     });
 
     return {
