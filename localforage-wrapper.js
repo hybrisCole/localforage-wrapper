@@ -3,7 +3,6 @@
 angular
   .module('capilleira.localforage-wrapper', [])
   .factory('LocalForageFactory', function($q, JSONArrayDriver) {
-    // console.time('JSONArrayDriver.generateConfig()');
     var CONSTANT_VARS = {
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
         LOCALFORAGE_EXPIRATION: {
@@ -60,6 +59,10 @@ angular
       if (!isLocalStorageNameSupported()) {
         driverConfig = ['jsonArrayWrapper'];
       }
+      alert(msie);
+      alert(navigator.userAgent);
+      alert(_.isNaN(msie));
+      alert(JSON.stringify(driverConfig));
       localforage.config({
         name:'kZpVnlVcXkiOiI',
         version:1.0,
