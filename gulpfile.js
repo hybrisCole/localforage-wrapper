@@ -8,7 +8,7 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify');
 
 var paths = {
-  js: ['localforage-wrapper.js', 'json-driver.js']
+  js: ['localforage-wrapper.js']
 };
 
 // Build task

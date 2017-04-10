@@ -2,7 +2,7 @@
 
 angular
   .module('capilleira.localforage-wrapper', [])
-  .factory('LocalForageFactory', function($q, JSONArrayDriver) {
+  .factory('LocalForageFactory', function($q) {
     var CONSTANT_VARS = {
         DATE_FORMAT: 'MM/DD/YYYY HH:mm:ss',
         LOCALFORAGE_EXPIRATION: {
@@ -29,47 +29,12 @@ angular
         }
         return sanitizedObj;
 
-      },
-      isLocalStorageNameSupported = function() {
-        var key =  'capilleira__' + Math.round(Math.random() * 1e7),
-          storage = window.sessionStorage,
-          supported;
-        try {
-          supported = ('localStorage' in window && window.localStorage !== null);
-          if (supported) {
-            storage.setItem(key, '');
-            storage.removeItem(key);
-          }
-          return true;
-        } catch (error) {
-          return false;
-        }
       };
-    localforage.defineDriver(JSONArrayDriver.generateConfig()).then(function() {
-      //is it IE?
-      var driverConfig = [localforage.INDEXEDDB, localforage.WEBSQL, localforage.LOCALSTORAGE],
-        msie = parseInt((/msie (\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-      if (_.isNaN(msie)) {
-        msie = parseInt((/trident\/.*; rv:(\d+)/.exec(navigator.userAgent.toLowerCase()) || [])[1]);
-      }
-      if (!_.isNaN(msie)) {
-        console.log('IE detected, localforage using localstorage');
-        driverConfig = [localforage.LOCALSTORAGE];
-      }
-      if (!isLocalStorageNameSupported()) {
-        driverConfig = ['jsonArrayWrapper'];
-      }
-      alert(msie);
-      alert(navigator.userAgent);
-      alert(_.isNaN(msie));
-      alert(JSON.stringify(driverConfig));
-      localforage.config({
-        name:'kZpVnlVcXkiOiI',
-        version:1.0,
-        storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
-        description:'4dWRZWkpEQXltL1dGMllRd0',
-        driver: driverConfig
-      });
+    localforage.config({
+      name:'kZpVnlVcXkiOiI',
+      version:1.0,
+      storeName:'eaJcSmvKK496xmDaE7IFMgSXg', // Should be alphanumeric, with underscores.
+      description:'4dWRZWkpEQXltL1dGMllRd0',
     });
 
     return {
