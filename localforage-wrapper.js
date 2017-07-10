@@ -28,7 +28,6 @@ angular
           });
         }
         return sanitizedObj;
-
       };
     localforage.config({
       name:'kZpVnlVcXkiOiI',
@@ -71,6 +70,15 @@ angular
 
         return defer.promise;
       },
+      remove: function(key) {
+        var defer = $q.defer();
+        localforage.removeItem(key).then(function() {
+          defer.resolve({status:'OK!'});
+        }).catch(function (err) {
+          defer.reject(err);
+        });
+        return defer.promise;
+      },
       set: function(key, value, expiration) {
         expiration = expiration || CONSTANT_VARS.LOCALFORAGE_EXPIRATION;
         var isArray = _.isArray(value),
@@ -88,15 +96,6 @@ angular
           defer.resolve(data);
         }).catch(function(err) {
           console.error(err);
-          defer.reject(err);
-        });
-        return defer.promise;
-      },
-      remove: function(key) {
-        var defer = $q.defer();
-        localforage.removeItem(key).then(function() {
-          defer.resolve({status:'OK!'});
-        }).catch(function (err) {
           defer.reject(err);
         });
         return defer.promise;
